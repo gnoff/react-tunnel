@@ -1,0 +1,58 @@
+{
+  "name": "react-context-provider",
+  "version": "0.0.1",
+  "description": "React component and decorator for context injection",
+  "main": "./lib/index.js",
+  "scripts": {
+    "build:lib": "babel src --out-dir lib",
+    "build:umd": "webpack src/index.js dist/react-context-provider.js --config webpack.config.development.js",
+    "build:umd:min": "webpack src/index.js dist/react-context-provider.min.js --config webpack.config.production.js",
+    "build": "npm run build:lib && npm run build:umd && npm run build:umd:min",
+    "clean": "rimraf lib dist coverage",
+    "lint": "eslint src test",
+    "prepublish": "npm run clean && npm run build",
+    "test": "mocha --compilers js:babel/register --recursive",
+    "test:watch": "npm test -- --watch",
+    "test:cov": "babel-node ./node_modules/isparta/bin/isparta cover ./node_modules/mocha/bin/_mocha -- --recursive"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gnoff/react-context-provider.git"
+  },
+  "keywords": [
+    "react",
+    "context",
+    "provide",
+    "provider",
+    "inject",
+    "injection"
+  ],
+  "author": "Josh Story <jcs.gnoff@gmail.com> (http://github.com/gnoff)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gnoff/react-context-provider/issues"
+  },
+  "homepage": "https://github.com/gnoff/react-context-provider",
+  "devDependencies": {
+    "babel": "5.x.x",
+    "babel-core": "5.x.x",
+    "babel-eslint": "4.x.x",
+    "babel-loader": "5.x.x",
+    "eslint": "1.x.x",
+    "eslint-config-airbnb": "0.0.7",
+    "eslint-plugin-react": "3.x.x",
+    "expect": "1.x.x",
+    "isparta": "3.x.x",
+    "istanbul": "0.3.x",
+    "jsdom": "6.x.x",
+    "mocha": "2.x.x",
+    "mocha-jsdom": "1.x.x",
+    "react": "0.13.x",
+    "rimraf": "2.x.x",
+    "webpack": "1.x.x",
+    "webpack-dev-server": "1.x.x"
+  },
+  "dependencies": {
+    "invariant": "2.x.x"
+  }
+}
