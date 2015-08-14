@@ -42,6 +42,7 @@
     "eslint-config-airbnb": "0.0.7",
     "eslint-plugin-react": "3.x.x",
     "expect": "1.x.x",
+    "exenv": "1.x.x",
     "isparta": "3.x.x",
     "istanbul": "0.3.x",
     "jsdom": "6.x.x",

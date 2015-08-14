@@ -1,6 +1,8 @@
 import invariant from 'invariant';
 import shallowEqual from '../utils/shallowEqual';
 import isPlainObject from '../utils/isPlainObject';
+import hasEmptyIntersection from '../utils/hasEmptyIntersection';
+import sharedKeys from '../utils/sharedKeys';
 
 export default function createProvider(React) {
   const { Component, PropTypes } = React;
@@ -41,16 +43,41 @@ export default function createProvider(React) {
 
     providedFromPropsAndContext(props, context) {
       const isNestedProvider = isPlainObject(context.provided);
-      const { children, allowOverload, forwardProvided, ...remainingProps} = props;
+      const parentProvided = isNestedProvider ? context.provided : {};
+      const { children, allowOverload, forwardProvided, ...provided} = props;
+
+      if (!isNestedProvider) {
+        return provided;
+      }
+
       invariant(
-        !isNestedProvider || allowOverload === true || allowOverload === false,
-        'This Provider appears to be nested inside another provider. `allowOverload` ' + 
-        'must be specified (`true` or `false` boolean values only). Instead received %s.',
-        allowOverload
+        forwardProvided === true || forwardProvided === false,
+        'This Provider appears to be nested inside another provider. `forwardProvided` must be ' + 
+        'specified (`true` or `false` boolean values only). Instead received %s.',
+        forwardProvided
       );
-      let provided = remainingProps
-      if ( forwardProvided !== false ) {
-        provided = {...context.provided, ...provided};
+
+      if (!forwardProvided) {
+        return provided;
+      } else {
+        invariant(
+          allowOverload === true || allowOverload === false,
+          'This Provider appears to be nested inside another provider and configured to forward ' + 
+          '`provided` from parent. `allowOverload` must be specified (`true` or `false` boolean ' + 
+          'values only). Instead received %s.',
+          allowOverload
+        );
+        invariant(
+          allowOverload || hasEmptyIntersection(parentProvided, provided),
+          'This Provider is configured to disallow `provided` overloading but finds its `provided props` ' + 
+          'conflicts with `provided props` from a parent Provider. the following `provided props` would overload a ' + 
+          'parent `provided props`: %s.',
+          sharedKeys(parentProvided, provided)
+        );
+
+        if (!hasEmptyIntersection(parentProvided, provided)) {
+          return {...parentProvided, ...provided};
+        }
       }
       return provided;
     }
