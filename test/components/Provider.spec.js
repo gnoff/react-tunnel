@@ -75,39 +75,207 @@ describe('React', () => {
       )).toThrow(/nested/)
     });
 
-    it('should replace just the reducer when receiving a new store in props', () => {
-      const store1 = createStore((state = 10) => state + 1);
-      const store2 = createStore((state = 10) => state * 2);
-      const spy = expect.createSpy(() => ({}));
-
-      class ProviderContainer extends Component {
-        state = { store: store1 };
-
-        render() {
-          return (
-            <Provider store={this.state.store}>
-              {() => <Child />}
-            </Provider>
-          );
-        }
+    it('should require `forwardProps` prop if nested', () => {
+      const parentProvided = {
+        string: "a string",
+        number: 1,
+        func: fn,
+        object: obj,
       }
 
-      const container = TestUtils.renderIntoDocument(<ProviderContainer />);
-      const child = TestUtils.findRenderedComponentWithType(container, Child);
-      expect(child.context.store.getState()).toEqual(11);
+      const nestedProvided = {
+        nonOverloaded: "prop",
+      }
 
-      child.context.store.subscribe(spy);
-      child.context.store.dispatch({});
-      expect(spy.calls.length).toEqual(1);
-      expect(child.context.store.getState()).toEqual(12);
+      expect(() => TestUtils.renderIntoDocument(
+        <Provider {...parentProvided}>
+          {() => (
+            <Child>
+              <Provider {...nestedProvided}>
+                {() => <DeepChild />}
+              </Provider>
+            </Child>
+          )}
+        </Provider>
+      )).toThrow(/forwardProvided/);
+    });
 
-      container.setState({ store: store2 });
-      expect(spy.calls.length).toEqual(2);
-      expect(child.context.store.getState()).toEqual(24);
+    it('should require `allowOverload` prop if `forwardProvided` is `true`', () => {
+      const parentProvided = {
+        string: "a string",
+        number: 1,
+        func: fn,
+        object: obj,
+      }
 
-      child.context.store.dispatch({});
-      expect(spy.calls.length).toEqual(3);
-      expect(child.context.store.getState()).toEqual(48);
+      const nestedProvided = {
+        nonOverloaded: "prop",
+      }
+
+      expect(() => TestUtils.renderIntoDocument(
+        <Provider {...parentProvided}>
+          {() => (
+            <Child>
+              <Provider forwardProvided={true} {...nestedProvided}>
+                {() => <DeepChild />}
+              </Provider>
+            </Child>
+          )}
+        </Provider>
+      )).toThrow(/allowOverload/);
+
+      expect(() => TestUtils.renderIntoDocument(
+        <Provider {...parentProvided}>
+          {() => (
+            <Child>
+              <Provider forwardProvided={false} {...nestedProvided}>
+                {() => <DeepChild />}
+              </Provider>
+            </Child>
+          )}
+        </Provider>
+      )).toNotThrow();
+    });
+
+    it('should forward provided props according to `forwardProvided? {bool}`', () => {
+      const parentProvided = {
+        string: "a string",
+        number: 1,
+        func: fn,
+        object: obj,
+      }
+
+      const nestedProvided = {
+        nonOverloaded: "prop",
+      }
+
+      const forwardingTree = TestUtils.renderIntoDocument(
+        <Provider {...parentProvided}>
+          {() => (
+            <Child>
+              <Provider forwardProvided={true} allowOverload={true} {...nestedProvided}>
+                {() => <DeepChild />}
+              </Provider>
+            </Child>
+          )}
+        </Provider>
+      );
+
+      const deepChild = TestUtils.findRenderedComponentWithType(forwardingTree, DeepChild);
+      expect(deepChild.context.provided).toEqual({...parentProvided, ...nestedProvided});
+      expect(deepChild.context.provided.forwardProvided).toBe(undefined);
+      expect(deepChild.context.provided.string).toBe("a string");
+      expect(deepChild.context.provided.nonOverloaded).toBe("prop");
+      expect(deepChild.context.provided.func()).toBe(obj);
+      expect(deepChild.context.provided.object).toBe(obj);
+
+      const nonForwardingTree = TestUtils.renderIntoDocument(
+        <Provider {...parentProvided}>
+          {() => (
+            <Child>
+              <Provider forwardProvided={false} {...nestedProvided}>
+                {() => <DeepChild />}
+              </Provider>
+            </Child>
+          )}
+        </Provider>
+      );
+
+      const deepChildTwo = TestUtils.findRenderedComponentWithType(nonForwardingTree, DeepChild);
+      expect(deepChildTwo.context.provided).toEqual({...nestedProvided});
+      expect(deepChildTwo.context.provided.forwardProvided).toBe(undefined);
+      expect(deepChildTwo.context.provided.string).toBe(undefined);
+      expect(deepChildTwo.context.provided.nonOverloaded).toBe("prop");
+      expect(deepChildTwo.context.provided.func).toBe(undefined);
+      expect(deepChildTwo.context.provided.object).toBe(undefined);
+
+    });
+
+    it('should allow provided overloading according to `allowOverload? {bool}`', () => {
+      const parentProvided = {
+        string: "a string",
+        number: 1,
+        func: fn,
+        object: obj,
+      }
+
+      const nestedProvidedOne = {
+        nonOverloaded: "prop",
+      }
+
+      const nestedProvidedTwo = {
+        withOverloaded: "props",
+        string: "overloaded string",
+      }
+
+      expect(() => TestUtils.renderIntoDocument(
+        <Provider {...parentProvided}>
+          {() => (
+            <Child>
+              <Provider forwardProvided={true} allowOverload={true} {...nestedProvidedOne}>
+                {() => <DeepChild />}
+              </Provider>
+            </Child>
+          )}
+        </Provider>
+      )).toNotThrow()
+
+      expect(() => TestUtils.renderIntoDocument(
+        <Provider {...parentProvided}>
+          {() => (
+            <Child>
+              <Provider forwardProvided={true} allowOverload={false} {...nestedProvidedOne}>
+                {() => <DeepChild />}
+              </Provider>
+            </Child>
+          )}
+        </Provider>
+      )).toNotThrow()
+
+
+      expect(() => TestUtils.renderIntoDocument(
+        <Provider {...parentProvided}>
+          {() => (
+            <Child>
+              <Provider forwardProvided={true} allowOverload={true} {...nestedProvidedTwo}>
+                {() => <DeepChild />}
+              </Provider>
+            </Child>
+          )}
+        </Provider>
+      )).toNotThrow()
+
+      expect(() => TestUtils.renderIntoDocument(
+        <Provider {...parentProvided}>
+          {() => (
+            <Child>
+              <Provider forwardProvided={true} allowOverload={false} {...nestedProvidedTwo}>
+                {() => <DeepChild />}
+              </Provider>
+            </Child>
+          )}
+        </Provider>
+      )).toThrow(/allowOverload/)
+
+      const overloadedTree = TestUtils.renderIntoDocument(
+        <Provider {...parentProvided}>
+          {() => (
+            <Child>
+              <Provider forwardProvided={true} allowOverload={true} {...nestedProvidedTwo}>
+                {() => <DeepChild />}
+              </Provider>
+            </Child>
+          )}
+        </Provider>
+      );
+
+      const deepChild = TestUtils.findRenderedComponentWithType(overloadedTree, DeepChild);
+      expect(deepChild.context.provided).toEqual({...parentProvided, ...nestedProvidedTwo});
+      expect(deepChild.context.provided.withOverloaded).toBe("props");
+      expect(deepChild.context.provided.string).toBe("overloaded string");
+      expect(deepChild.context.provided.func).toBe(fn);
+      expect(deepChild.context.provided.object).toBe(obj);
+
     });
   });
 });

@@ -69,15 +69,12 @@ export default function createProvider(React) {
         );
         invariant(
           allowOverload || hasEmptyIntersection(parentProvided, provided),
-          'This Provider is configured to disallow `provided` overloading but finds its `provided props` ' + 
-          'conflicts with `provided props` from a parent Provider. the following `provided props` would overload a ' + 
-          'parent `provided props`: %s.',
+          'This Provider is configured via `allowOverload` to disallow `provided` overloading but finds its ' +
+          '`provided props` conflicts with `provided props` from a parent Provider. the following `provided ' +
+          'props` would overload a parent `provided props`: %s.',
           sharedKeys(parentProvided, provided)
         );
-
-        if (!hasEmptyIntersection(parentProvided, provided)) {
-          return {...parentProvided, ...provided};
-        }
+        return {...parentProvided, ...provided};
       }
       return provided;
     }
