@@ -52,7 +52,7 @@ export default function createProvider(React) {
 
       invariant(
         forwardProvided === true || forwardProvided === false,
-        'This Provider appears to be nested inside another provider. `forwardProvided` must be ' + 
+        'This Provider appears to be nested inside another provider. `forwardProvided` must be ' +
         'specified (`true` or `false` boolean values only). Instead received %s.',
         forwardProvided
       );
@@ -62,8 +62,8 @@ export default function createProvider(React) {
       } else {
         invariant(
           allowOverload === true || allowOverload === false,
-          'This Provider appears to be nested inside another provider and configured to forward ' + 
-          '`provided` from parent. `allowOverload` must be specified (`true` or `false` boolean ' + 
+          'This Provider appears to be nested inside another provider and configured to forward ' +
+          '`provided` from parent. `allowOverload` must be specified (`true` or `false` boolean ' +
           'values only). Instead received %s.',
           allowOverload
         );
