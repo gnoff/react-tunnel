@@ -11,6 +11,8 @@ function getDisplayName(Component) {
 export default function createInject(React) {
   const { Component, PropTypes } = React;
 
+  //@TODO have not tested nextVersion stuff
+  var nextVersion = 0;
   return function inject(mapProvidedToProps) {
     const finalMapProvidedToProps = mapProvidedToProps || defaultMapProvidedToProps;
 
@@ -92,7 +94,7 @@ export default function createInject(React) {
         typeof __DEV__ !== 'undefined' &&
         __DEV__ //eslint-disable-line no-undef
       ) {
-        Connect.prototype.componentWillUpdate = function componentWillUpdate() {
+        Inject.prototype.componentWillUpdate = function componentWillUpdate() {
           if (this.version === version) {
             return;
           }
