@@ -1,4 +1,4 @@
-# react-context-provider
+# react-tunnel
 React components and decorators for putting context-like values into context and pulling them out as props
 
 Heavily copied/modeled off the code used in [react-redux](https://github.com/gaearon/react-redux/) by @gaearon 
@@ -17,27 +17,27 @@ Heavily copied/modeled off the code used in [react-redux](https://github.com/gae
 
 ## installation
 
-`npm install --save react-context-provider`.  
+`npm install --save react-tunnel`.  
 
 ## React Native
 
-for React: require/import from `react-context-provider`.  
-For React Native: require/import from `react-context-provider/native`.
+for React: require/import from `react-tunnel`.  
+For React Native: require/import from `react-tunnel/native`.
 
 ## Quick Start
 
-`react-context-provider` helps you provide injectable props to child components to help avoid deep chains of prop passing
+`react-tunnel` helps you provide injectable props to child components to help avoid deep chains of prop passing
 
-- install with `npm install react-context-provider`
+- install with `npm install react-tunnel`
 - import or require `Provider` and `inject` by
 ```js
 
 //es5
-var Provider = require('react-context-provider').Provider;
-var inject = require('react-context-provider').inject;
+var Provider = require('react-tunnel').Provider;
+var inject = require('react-tunnel').inject;
 
 //es6
-import { Provider, inject } from 'react-context-provider'
+import { Provider, inject } from 'react-tunnel'
 
 ```
 
@@ -78,7 +78,7 @@ render() {
 
 ## Best Practices
 
-`react-context-provider` uses React's context feature to make provided props available to children regardless of how deep they are. While this is powerful it also can be abused and make for a nightmare to manage.
+`react-tunnel` uses React's context feature to make provided props available to children regardless of how deep they are. While this is powerful it also can be abused and make for a nightmare to manage.
 
 It is reccommended that this functionality be used to provide generally static properties that don't change much if at all based on the local conditions of the injecting component. Examples might include
 

@@ -1,12 +1,12 @@
 {
-  "name": "react-context-provider",
+  "name": "react-tunnel",
   "version": "0.0.1",
   "description": "React component and decorator for context injection",
   "main": "./lib/index.js",
   "scripts": {
     "build:lib": "babel src --out-dir lib",
-    "build:umd": "webpack src/index.js dist/react-context-provider.js --config webpack.config.development.js",
-    "build:umd:min": "webpack src/index.js dist/react-context-provider.min.js --config webpack.config.production.js",
+    "build:umd": "webpack src/index.js dist/react-tunnel.js --config webpack.config.development.js",
+    "build:umd:min": "webpack src/index.js dist/react-tunnel.min.js --config webpack.config.production.js",
     "build": "npm run build:lib && npm run build:umd && npm run build:umd:min",
     "clean": "rimraf lib dist coverage",
     "lint": "eslint src test",
@@ -17,10 +17,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gnoff/react-context-provider.git"
+    "url": "https://github.com/gnoff/react-tunnel.git"
   },
   "keywords": [
     "react",
+    "tunnel",
     "context",
     "provide",
     "provider",
@@ -30,9 +31,9 @@
   "author": "Josh Story <jcs.gnoff@gmail.com> (http://github.com/gnoff)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gnoff/react-context-provider/issues"
+    "url": "https://github.com/gnoff/react-tunnel/issues"
   },
-  "homepage": "https://github.com/gnoff/react-context-provider",
+  "homepage": "https://github.com/gnoff/react-tunnel",
   "devDependencies": {
     "babel": "5.x.x",
     "babel-core": "5.x.x",
