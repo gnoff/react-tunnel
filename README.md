@@ -64,13 +64,15 @@ function mapProvidedToProps(provided) {
     }
 }
 
-var InjectedChild = inject(mapProvidedToProps)(SomeChild); //notice that inject returns a wrapping function that you must pass your inject target to
+//notice that inject returns a wrapping function
+var InjectedChild = inject(mapProvidedToProps)(SomeChild); 
 
-// now in InjectedChild's render method we can do
+// now in InjectedChild props will have `that`
 ...
 render() {
     var injectedProp = this.props.that;
-    return <span>{injectedProp}</span>; //will render as <span>will be provided</span>
+    return <span>{injectedProp}</span>;
+    //will render as <span>will be provided</span>
 }
 ```
 
