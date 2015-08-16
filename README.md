@@ -89,19 +89,19 @@ Also please consider that the context api for React has PropType checking for a 
 
 ## API
 
-### `<Provider [forwardProvided] [allowOverload] ...propsToProvide>`
+### `<Provider [forwardProvided] [allowOverload] {...propsToProvide}>`
 
 makes `...propsToProvide` available via `context.provided` to children of Provider. use `inject` to access them easily
 
 #### Props
 
-- `forwardProvided` {bool}: required if this `<Provider>` is nested within another one in the render tree.
-  - `true`: will put parent `context.provided` properties on it's own `context.provided`
-  - `false`: parent `context.provided` values will become unavailable to children of this `Provider`
-- `allowOverload` {bool}: required if this `<Provider>` is nested within another and is configured to `forwardProvided`
+- `forwardProvided? {bool}`: required if this <Provider> is nested within another one in the render tree.
+  - `true`: will put parent 'context.provided' properties on it's own 'context.provided'
+  - `false`: parent 'context.provided' values will become unavailable to children of this 'Provider'
+- `allowOverload? {bool}`: required if this '<Provider>' nested within another and is configured to 'forwardProvided'
   - `true`: local provided props will mask forwared provided props if they share the same name
   - `false`: throws an error if a local provided prop has a name collision with a parent provided prop
-- `...propsToProvide`: any other prop that you pass to Provider will be made `inject`able
+- `{...propsToProvide}`: any other prop that you pass to Provider will be made `inject`able
 
 #### Children
 
@@ -117,7 +117,7 @@ Creates a decorator which injects props from `Provider` into the decorated compo
 
 #### Arguments
 
-- `mapProvidedToProps(provided)`: called when decorated Component mounts and when it receives new context. the return object of this call is added to the underlying Component as props
+- `mapProvidedToProps(provided)? returns Object`: called when decorated Component mounts and when it receives new context. the return object of this call is added to the underlying Component as props
 - `default`: if `mapProvidedToProps` is not passed to `inject` then all `Provider` values are passed to underlying component.
 
 
