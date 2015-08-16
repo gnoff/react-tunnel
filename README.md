@@ -10,12 +10,12 @@ Heavily copied/modeled off the code used in [react-redux](https://github.com/gae
 - [Quick Start](#quick-start)
 - [Best Practices](#bestpractices)
 - [API](#api)
-  - [`<Provider {...props}>`](#provider-store)
-  - [`inject([mapProvidedToProps])`](#connectmapstatetoprops-mapdispatchtoprops-mergeprops)
+  - [`<Provider {...props}>`](#forwardProvided)
+  - [`inject([mapProvidedToProps])`](#forwardProvided)
 - [Thanks](#thanks)
 - [License](#license)
 
-## Installations
+## installation
 
 `npm install --save react-context-provider`.  
 
@@ -45,7 +45,7 @@ import { Provider, inject } from 'react-context-provider'
 ```js
 render() {
     return (
-        <Provider this="will be provided" andThis="will also be provided">
+        <Provider thing="will be provided" anotherThing="will also be provided">
             {(function () {
                 return <Anything>
             })}
@@ -60,7 +60,7 @@ var SomeChild = require('./SomeChildOfAnything') //a react Component
 
 function mapProvidedToProps(provided) {
     return {
-        that: provided.this
+        that: provided.thing
     }
 }
 
@@ -76,9 +76,58 @@ render() {
 }
 ```
 
+## Best Practices
+
+`react-context-provider` uses React's context feature to make provided props available to children regardless of how deep they are. While this is powerful it also can be abused and make for a nightmare to manage.
+
+It is reccommended that this functionality be used to provide generally static properties that don't change much if at all based on the local conditions of the injecting component. Examples might include
+
+- Providing viewport dimensions to arbitrarily deep Components
+- Providing (redux)[https://github.com/rackt/redux] action creators from a parent `connected` Component to deep children
+
+Also please consider that the context api for React has PropType checking for a reason and that by using this library and opting out of that stronger contract has costs and you may want to utilize the base context features rather than this library
+
 ## API
+
+### `<Provider [forwardProvided] [allowOverload] ...propsToProvide>`
+
+makes `...propsToProvide` available via `context.provided` to children of Provider. use `inject` to access them easily
+
+#### Props
+
+- `forwardProvided` {bool}: required if this `<Provider>` is nested within another one in the render tree.
+  - `true`: will put parent `context.provided` properties on it's own `context.provided`
+  - `false`: parent `context.provided` values will become unavailable to children of this `Provider`
+- `allowOverload` {bool}: required if this `<Provider>` is nested within another and is configured to `forwardProvided`
+  - `true`: local provided props will mask forwared provided props if they share the same name
+  - `false`: throws an error if a local provided prop has a name collision with a parent provided prop
+- `...propsToProvide`: any other prop that you pass to Provider will be made `inject`able
+
+#### Children
+
+until React 0.14 is realeased and the changes to parent context are implemented the only child `Provider` can have is a function. It should return what you want rendered inside the provider.
+
+#### Nesting
+
+`Providers` are nestable and if configured affirmatively will forward provided values for parent `Providers`. Use this if you want to say Provide some truly global props at the root of your App but also use `Provider`s for (Redux action creators)[https://github.com/gaearon/react-redux] produced via `connect` to the local render tree
+
+### `inject([mapProvidedToProps])`
+
+Creates a decorator which injects props from `Provider` into the decorated component according to the `mapProvidedToProps` function. 
+
+#### Arguments
+
+- `mapProvidedToProps(provided)`: called when decorated Component mounts and when it receives new context. the return object of this call is added to the underlying Component as props
+- `default`: if `mapProvidedToProps` is not passed to `inject` then all `Provider` values are passed to underlying component.
+
+
 ## Thanks
+- (@gaearon)[https://github.com/gaearon] for inspiring this API with the more specialized (react-redux)[https://github.com/gaearon/react-redux]
+- (@rt2zz)[https://www.github.com/rt2zz] for helping flesh out the design and API
+
 ## License
+
+MIT
 
 
 
