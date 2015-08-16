@@ -10,8 +10,8 @@ Heavily copied/modeled off the code used in [react-redux](https://github.com/gae
 - [Quick Start](#quick-start)
 - [Best Practices](#bestpractices)
 - [API](#api)
-  - [`<Provider {...props}>`](#forwardProvided)
-  - [`inject([mapProvidedToProps])`](#forwardProvided)
+  - [`<Provider {...props}>`](#provider-forwardprovided-allowoverload-propstoprovide)
+  - [`inject([mapProvidedToProps])`](#injectmapprovidedtoprops)
 - [Thanks](#thanks)
 - [License](#license)
 
@@ -118,12 +118,12 @@ Creates a decorator which injects props from `Provider` into the decorated compo
 #### Arguments
 
 - `mapProvidedToProps(provided)? returns Object`: called when decorated Component mounts and when it receives new context. the return object of this call is added to the underlying Component as props
-- `default`: if `mapProvidedToProps` is not passed to `inject` then all `Provider` values are passed to underlying component.
+- `default`: if `mapProvidedToProps` is not passed to g`inject` then all `Provider` values are passed to underlying component.
 
 
 ## Thanks
-- (@gaearon)[https://github.com/gaearon] for inspiring this API with the more specialized (react-redux)[https://github.com/gaearon/react-redux]
-- (@rt2zz)[https://www.github.com/rt2zz] for helping flesh out the design and API
+- [@gaearon](https://github.com/gaearon) for inspiring this API with the more specialized [react-redux](https://github.com/gaearon/react-redux)
+- [@rt2zz](https://www.github.com/rt2zz) for helping flesh out the design and API
 
 ## License
 
