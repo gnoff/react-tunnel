@@ -20,7 +20,7 @@ module.exports = {
     ]
   },
   output: {
-    library: 'ReactContextProvider',
+    library: 'ReactTunnel',
     libraryTarget: 'umd'
   },
   resolve: {
