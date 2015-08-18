@@ -176,5 +176,99 @@ describe('React', () => {
       expect(child.props.saying).toBe('goodbye');
 
     });
+
+    it('should rerender component if props change even if provided does not.', () => {
+      const spy = expect.createSpy(() => ({}));
+      function render({ saying, changingProp }) {
+        spy();
+        return <div saying={saying} changingProp={changingProp} />;
+      }
+      
+      const InjectedChild = inject()(Child);
+
+      @inject()
+      class InjectedContainer extends Component {
+        render() {
+          return render(this.props);
+        }
+      }
+
+      class ProviderContainer extends Component {
+        constructor(props, context) {
+          super(props, context);
+          this.state = {
+            saying: "hello",
+            otherProp: "A",
+          };
+        }
+        render() {
+          return (
+            <SimpleProvider saying={this.state.saying}>
+              {() => <InjectedContainer changingProp={this.state.otherProp} />}
+            </SimpleProvider>
+          );
+        }
+      }
+
+      const tree = TestUtils.renderIntoDocument(<ProviderContainer />);
+
+      const child = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+      expect(spy.calls.length).toBe(1);
+      expect(child.props.saying).toBe('hello');
+      expect(child.props.changingProp).toBe('A');
+
+      tree.setState({otherProp: "B"});
+
+      expect(spy.calls.length).toBe(2);
+      expect(child.props.saying).toBe('hello');
+      expect(child.props.changingProp).toBe('B');
+
+    });
+
+    it('should not rerender if injected props remain the same.', () => {
+      const spy = expect.createSpy(() => ({}));
+      function render({ otherProp }) {
+        spy();
+        return <div otherProp={otherProp} />;
+      }
+      
+      const InjectedChild = inject()(Child);
+
+      @inject(provided => ({otherProp: provided.otherProp}))
+      class InjectedContainer extends Component {
+        render() {
+          return render(this.props);
+        }
+      }
+
+      class ProviderContainer extends Component {
+        constructor(props, context) {
+          super(props, context);
+          this.state = {
+            saying: "hello",
+            otherProp: "A",
+          };
+        }
+        render() {
+          return (
+            <SimpleProvider {...this.state}>
+              {() => <InjectedContainer />}
+            </SimpleProvider>
+          );
+        }
+      }
+
+      const tree = TestUtils.renderIntoDocument(<ProviderContainer />);
+
+      const child = TestUtils.findRenderedDOMComponentWithTag(tree, 'div');
+      expect(spy.calls.length).toBe(1);
+      expect(child.props.otherProp).toBe('A');
+
+      tree.setState({saying: "goodbye"});
+
+      expect(spy.calls.length).toBe(1);
+      expect(child.props.otherProp).toBe('A');
+
+    });
   });
 });
