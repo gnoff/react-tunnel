@@ -1,6 +1,6 @@
 {
   "name": "react-tunnel",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "React component and decorator for prop providing and prop injection",
   "main": "./lib/index.js",
   "scripts": {
