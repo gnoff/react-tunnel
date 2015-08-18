@@ -31,7 +31,7 @@ export default function createInject(React) {
 
     return function wrapWithInject(WrappedComponent) {
       class Inject extends Component {
-        static displayName = `Inject(${getDisplayName(WrappedComponent)})`;
+        static displayName = `inject(${getDisplayName(WrappedComponent)})`;
         static WrappedComponent = WrappedComponent;
 
         static contextTypes = {
