@@ -39,7 +39,7 @@ export default function createInject(React) {
         };
 
         shouldComponentUpdate(nextProps, nextState, nextContext) {
-          return !shallowEqual(this.state.provided, nextContext.provided);
+          return !shallowEqual(this.state.provided, nextContext.provided) || !shallowEqual(this.props, nextProps);
         }
 
         constructor(props, context) {
