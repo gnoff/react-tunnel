@@ -32,7 +32,7 @@ describe('React', () => {
     const obj = {a: 1};
     const fn = () => obj;
 
-    it('should add the arbitrary props to the child context', () => {
+    it('should add the `provide` prop to the child context, if plain Object', () => {
 
       const targetProvided = {
         string: "a string",
@@ -42,7 +42,7 @@ describe('React', () => {
       }
 
       const tree = TestUtils.renderIntoDocument(
-        <Provider {...targetProvided}>
+        <Provider provide={targetProvided}>
           {() => <Child />}
         </Provider>
       );
@@ -53,26 +53,35 @@ describe('React', () => {
       expect(child.context.provided.object).toBe(obj);
     });
 
-    it('should detect if it is a nested Provider', () => {
+    it('should add the `provide` prop return value to the child context, if function', () => {
 
-      const targetProvided = {
-        string: "a string",
-        number: 1,
-        func: fn,
-        object: obj,
-      }
+      const tree = TestUtils.renderIntoDocument(
+        <Provider provide={() => ({any: 'thing'})}>
+          {() => <Child />}
+        </Provider>
+      );
 
-      expect(() => TestUtils.renderIntoDocument(
-        <Provider {...targetProvided}>
+      const child = TestUtils.findRenderedComponentWithType(tree, Child);
+      expect(child.context.provided.any).toBe('thing');
+    });
+
+    it('should forward parent provided values if nested Provider', () => {
+
+      const forwardingTree = TestUtils.renderIntoDocument(
+        <Provider provide={{one: 1}}>
           {() => (
             <Child>
-              <Provider other="prop">
+              <Provider provide={{two: 2}}>
                 {() => <DeepChild />}
               </Provider>
             </Child>
           )}
         </Provider>
-      )).toThrow(/nested/)
+      )
+
+      const deepChild = TestUtils.findRenderedComponentWithType(forwardingTree, DeepChild);
+      expect(deepChild.context.provided).toEqual({one: 1, two: 2});
+
     });
 
     it('should require `forwardProps` prop if nested', () => {

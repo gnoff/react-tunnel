@@ -18,8 +18,10 @@ export default function createProvider(React) {
 
     static propTypes = {
       children: PropTypes.func.isRequired,
-      allowOverload: PropTypes.bool,
-      forwardProvided: PropTypes.bool,
+      provide: PropTypes.oneOfType([
+                  PropTypes.object,
+                  PropTypes.func,
+                ]),
     };
 
     getChildContext() {
@@ -44,39 +46,39 @@ export default function createProvider(React) {
     providedFromPropsAndContext(props, context) {
       const isNestedProvider = isPlainObject(context.provided);
       const parentProvided = isNestedProvider ? context.provided : {};
-      const { children, allowOverload, forwardProvided, ...provided} = props;
 
-      if (!isNestedProvider) {
-        return provided;
+      if (isNestedProvider) {
+        invariant(
+          isPlainObject(parentProvided),
+          'This Provider appears to be nested inside another provider but received a parent `provided` ' + 
+          'is not a plain Object. `provided` must be always be a plain Object. %s',
+          parentProvided
+        );  
+      } 
+
+
+      const { provide } = props;
+      let provider = provide;
+
+      if (isPlainObject(provide)) {
+        provider = (parentProvided) => ({...parentProvided, ...provide})
       }
+
+      let provided = provider(parentProvided);
 
       invariant(
-        forwardProvided === true || forwardProvided === false,
-        'This Provider appears to be nested inside another provider. `forwardProvided` must be ' +
-        'specified (`true` or `false` boolean values only). Instead received %s.',
-        forwardProvided
-      );
+        isPlainObject(provided),
+        'This Provider is attempting to provide something other than a plain Object. ' + 
+        'the `provide` prop must either be a plain object itself or a function that returns ' +
+        'a plain Object. `provide` is or returned %s',
+        provided
+      ); 
 
-      if (!forwardProvided) {
-        return provided;
-      } else {
-        invariant(
-          allowOverload === true || allowOverload === false,
-          'This Provider appears to be nested inside another provider and configured to forward ' +
-          '`provided` from parent. `allowOverload` must be specified (`true` or `false` boolean ' +
-          'values only). Instead received %s.',
-          allowOverload
-        );
-        invariant(
-          allowOverload || hasEmptyIntersection(parentProvided, provided),
-          'This Provider is configured via `allowOverload` to disallow `provided` overloading but finds its ' +
-          '`provided props` conflicts with `provided props` from a parent Provider. the following `provided ' +
-          'props` would overload a parent `provided props`: %s.',
-          sharedKeys(parentProvided, provided)
-        );
-        return {...parentProvided, ...provided};
-      }
       return provided;
+    }
+
+    isNested() {
+
     }
 
     render() {
