@@ -46,7 +46,7 @@ import { Provider, inject } from 'react-tunnel'
 //using object provide
 render() {
     return (
-        <Provider provide={{thing: "will be provided", anotherThing:"will also be provided"}}>
+        <Provider provide={{thing: "one", anotherThing: 2}}>
             {(function () {
                 return <Anything>
             })}
@@ -91,7 +91,7 @@ var InjectedChild = inject(mapProvidedToProps)(SomeChild);
 render() {
     var injectedProp = this.props.that;
     return <span>{injectedProp}</span>;
-    //will render as <span>will be provided</span>
+    //will render as <span>one</span>
 }
 ```
 
