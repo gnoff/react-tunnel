@@ -41,11 +41,30 @@ import { Provider, inject } from 'react-tunnel'
 
 ```
 
-- wrap a `Component` tree with `<Provider {...propsToProvide}` like
+- wrap a `Component` tree with `<Provider provide={fn|object}>` like
 ```js
+//using object provide
 render() {
     return (
-        <Provider thing="will be provided" anotherThing="will also be provided">
+        <Provider provide={{thing: "will be provided", anotherThing:"will also be provided"}}>
+            {(function () {
+                return <Anything>
+            })}
+        </Provider>
+    )
+}
+
+//or as a function
+function provider () {
+  return {
+    thing: "will be provided",
+    anotherThing:"will also be provided"
+  }
+}
+
+render() {
+    return (
+        <Provider provide={provider}>
             {(function () {
                 return <Anything>
             })}
@@ -89,19 +108,15 @@ Also please consider that the context api for React has PropType checking for a 
 
 ## API
 
-### `<Provider [forwardProvided] [allowOverload] {...propsToProvide}>`
+### `<Provider provide>`
 
-makes `...propsToProvide` available via `context.provided` to children of Provider. use `inject` to access them easily
+makes `provide` available via `context.provided` to children of Provider. use `inject` to access them easily
 
 #### Props
 
-- `forwardProvided? {bool}`: required if this <Provider> is nested within another one in the render tree.
-  - `true`: will put parent 'context.provided' properties on it's own 'context.provided'
-  - `false`: parent 'context.provided' values will become unavailable to children of this 'Provider'
-- `allowOverload? {bool}`: required if this '<Provider>' nested within another and is configured to 'forwardProvided'
-  - `true`: local provided props will mask forwared provided props if they share the same name
-  - `false`: throws an error if a local provided prop has a name collision with a parent provided prop
-- `{...propsToProvide}`: any other prop that you pass to Provider will be made `inject`able
+- `provide {fn | object}`:
+  - `provide: function(parentProvided) { return provided<object> }`: will provide the return value of `provide` prop. Function takes in any provided values from parent providers if any. If none, an empty object is passed.
+  - `provide: object`: provides any parent provided values if nested along with `provide` object properties. if there is a key collision the properties of the `provide` prop are used and mask similarly named properties from any parent provided objects
 
 #### Children
 
@@ -109,7 +124,9 @@ until React 0.14 is realeased and the changes to parent context are implemented 
 
 #### Nesting
 
-`Providers` are nestable and if configured affirmatively will forward provided values for parent `Providers`. Use this if you want to say Provide some truly global props at the root of your App but also use `Provider`s for (Redux action creators)[https://github.com/gaearon/react-redux] produced via `connect` to the local render tree
+`Provider`s are nestable and if using the object version of `provide` will automatically reprovide any values provided in the immediate parent `Provider`. Use this if you want to say Provide some truly global props at the root of your App but also use `Provider`s for (Redux action creators)[https://github.com/gaearon/react-redux] produced via `connect` to the local render tree.
+
+If you nest `Provider`s but use the function form of `provide` you will need to forward any desired parent provided values using the function forms argument `parentProvided`.
 
 ### `inject([mapProvidedToProps])`
 
