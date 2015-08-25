@@ -57,8 +57,8 @@ render() {
 //or as a function
 function provider () {
   return {
-    thing: "will be provided",
-    anotherThing:"will also be provided"
+    thing: "one",
+    anotherThing: 2
   }
 }
 
