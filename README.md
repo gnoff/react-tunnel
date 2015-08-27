@@ -10,7 +10,7 @@ Heavily copied/modeled off the code used in [react-redux](https://github.com/gae
 - [Quick Start](#quick-start)
 - [Best Practices](#bestpractices)
 - [API](#api)
-  - [`<Provider {...props}>`](#provider-forwardprovided-allowoverload-propstoprovide)
+  - [`<Provider provide>`](#provider-provide)
   - [`inject([mapProvidedToProps])`](#injectmapprovidedtoprops)
 - [Thanks](#thanks)
 - [License](#license)
@@ -58,7 +58,7 @@ render() {
 function provider () {
   return {
     thing: "one",
-    anotherThing: 2
+    anotherThing: 2g
   }
 }
 
@@ -135,7 +135,7 @@ Creates a decorator which injects props from `Provider` into the decorated compo
 #### Arguments
 
 - `mapProvidedToProps(provided)? returns Object`: called when decorated Component mounts and when it receives new context. the return object of this call is added to the underlying Component as props
-- `default`: if `mapProvidedToProps` is not passed to g`inject` then all `Provider` values are passed to underlying component.
+- `default`: if `mapProvidedToProps` is not passed to `inject` then all `Provider` values are passed to underlying component.
 
 
 ## Thanks
