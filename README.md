@@ -3,6 +3,10 @@ React components and decorators for putting context-like values into context and
 
 Heavily copied/modeled off the code used in [react-redux](https://github.com/gaearon/react-redux/) by @gaearon 
 
+[![build status](https://img.shields.io/travis/gnoff/react-tunnel/master.svg?style=flat-square)](https://travis-ci.org/gnoff/react-tunnel)
+[![npm version](https://img.shields.io/npm/v/react-tunnel.svg?style=flat-square)](https://www.npmjs.com/package/react-tunnel)
+[![npm downloads](https://img.shields.io/npm/dm/react-tunnel.svg?style=flat-square)](https://www.npmjs.com/package/react-tunnel)
+
 ## Table of Contents
 
 - [Installation](#installation)
