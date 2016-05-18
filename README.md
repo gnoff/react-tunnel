@@ -51,9 +51,7 @@ import { Provider, inject } from 'react-tunnel'
 render() {
     return (
         <Provider provide={{thing: "one", anotherThing: 2}}>
-            {(function () {
-                return <Anything>
-            })}
+          <Anything>
         </Provider>
     )
 }
@@ -69,9 +67,7 @@ function provider () {
 render() {
     return (
         <Provider provide={provider}>
-            {(function () {
-                return <Anything>
-            })}
+          <Anything>
         </Provider>
     )
 }
@@ -121,10 +117,6 @@ makes `provide` available via `context.provided` to children of Provider. use `i
 - `provide {fn | object}`:
   - `provide: function(parentProvided) { return provided{object} }`: will provide the return value of `provide` prop. Function takes in any provided values from parent providers if any. If none, an empty object is passed.
   - `provide: object`: provides any parent provided values if nested along with `provide` object properties. if there is a key collision the properties of the `provide` prop are used and mask similarly named properties from any parent provided objects
-
-#### Children
-
-until React 0.14 is realeased and the changes to parent context are implemented the only child `Provider` can have is a function. It should return what you want rendered inside the provider.
 
 #### Nesting
 
