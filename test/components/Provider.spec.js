@@ -43,7 +43,7 @@ describe('React', () => {
 
       const tree = TestUtils.renderIntoDocument(
         <Provider provide={targetProvided}>
-          {() => <Child />}
+          <Child />
         </Provider>
       );
 
@@ -57,7 +57,7 @@ describe('React', () => {
 
       const tree = TestUtils.renderIntoDocument(
         <Provider provide={() => ({any: 'thing'})}>
-          {() => <Child />}
+          <Child />
         </Provider>
       );
 
@@ -69,37 +69,31 @@ describe('React', () => {
 
       const forwardingTree = TestUtils.renderIntoDocument(
         <Provider provide={{one: 1}}>
-          {() => (
-            <Child>
-              <Provider provide={{two: 2}}>
-                {() => <DeepChild />}
-              </Provider>
-            </Child>
-          )}
+          <Child>
+            <Provider provide={{two: 2}}>
+              <DeepChild />
+            </Provider>
+          </Child>
         </Provider>
       )
 
       const forwardingTreeWithFn = TestUtils.renderIntoDocument(
         <Provider provide={{one: 1}}>
-          {() => (
-            <Child>
-              <Provider provide={(provided) => ({...provided, two: 2})}>
-                {() => <DeepChild />}
-              </Provider>
-            </Child>
-          )}
+          <Child>
+            <Provider provide={(provided) => ({...provided, two: 2})}>
+              <DeepChild />
+            </Provider>
+          </Child>
         </Provider>
       )
 
       const forwardingTreeWithFns = TestUtils.renderIntoDocument(
         <Provider provide={() => ({one: 1})}>
-          {() => (
-            <Child>
-              <Provider provide={(provided) => ({...provided, two: 2})}>
-                {() => <DeepChild />}
-              </Provider>
-            </Child>
-          )}
+          <Child>
+            <Provider provide={(provided) => ({...provided, two: 2})}>
+              <DeepChild />
+            </Provider>
+          </Child>
         </Provider>
       )
 
@@ -118,13 +112,11 @@ describe('React', () => {
 
       const forwardingTree = TestUtils.renderIntoDocument(
         <Provider provide={{thing: 1, other: 3}}>
-          {() => (
-            <Child>
-              <Provider provide={{thing: 2, andAnother: 4}}>
-                {() => <DeepChild />}
-              </Provider>
-            </Child>
-          )}
+          <Child>
+            <Provider provide={{thing: 2, andAnother: 4}}>
+              <DeepChild />
+            </Provider>
+          </Child>
         </Provider>
       )
 
@@ -139,73 +131,55 @@ describe('React', () => {
 
       expect(() => TestUtils.renderIntoDocument(
         <Provider>
-          {() => (
-            <Child />
-          )}
+          <Child />
         </Provider>
       )).toThrow(/provide/);
 
       expect(() => TestUtils.renderIntoDocument(
         <Provider provide="">
-          {() => (
-            <Child />
-          )}
+          <Child />
         </Provider>
       )).toThrow(/provide/);
 
       expect(() => TestUtils.renderIntoDocument(
         <Provider provide={undefined}>
-          {() => (
-            <Child />
-          )}
+          <Child />
         </Provider>
       )).toThrow(/provide/);
 
       expect(() => TestUtils.renderIntoDocument(
         <Provider provide={1}>
-          {() => (
-            <Child />
-          )}
+          <Child />
         </Provider>
       )).toThrow(/provide/);
 
       expect(() => TestUtils.renderIntoDocument(
         <Provider provide={{}}>
-          {() => (
-            <Child />
-          )}
+          <Child />
         </Provider>
       )).toNotThrow();
 
       expect(() => TestUtils.renderIntoDocument(
         <Provider provide={() => ({})}>
-          {() => (
-            <Child />
-          )}
+          <Child />
         </Provider>
       )).toNotThrow();
 
       expect(() => TestUtils.renderIntoDocument(
         <Provider provide={() => 1}>
-          {() => (
-            <Child />
-          )}
+          <Child />
         </Provider>
       )).toThrow(/provide/);
 
       expect(() => TestUtils.renderIntoDocument(
         <Provider provide={() => "test"}>
-          {() => (
-            <Child />
-          )}
+          <Child />
         </Provider>
       )).toThrow(/provide/);
 
       expect(() => TestUtils.renderIntoDocument(
         <Provider provide={() => () => ({})}>
-          {() => (
-            <Child />
-          )}
+          <Child />
         </Provider>
       )).toThrow(/provide/);
 
