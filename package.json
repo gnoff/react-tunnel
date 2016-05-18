@@ -49,7 +49,7 @@
     "jsdom": "6.x.x",
     "mocha": "2.x.x",
     "mocha-jsdom": "1.x.x",
-    "react": "0.13.x",
+    "react": "0.14.x",
     "rimraf": "2.x.x",
     "webpack": "1.x.x",
     "webpack-dev-server": "1.x.x"
