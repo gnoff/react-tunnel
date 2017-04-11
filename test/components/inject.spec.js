@@ -1,6 +1,6 @@
 import expect from 'expect';
 import jsdomReact from './jsdomReact';
-import React, { PropTypes, Component } from 'react/addons';
+import React, { PropTypes, Component, Children} from 'react/addons';
 import { inject } from '../../src/index';
 
 const { TestUtils } = React.addons;
@@ -69,7 +69,7 @@ describe('React', () => {
       }
 
       render() {
-        return this.props.children();
+        return Children.only(this.props.children);
       }
 
     }
@@ -87,7 +87,7 @@ describe('React', () => {
 
       const tree = TestUtils.renderIntoDocument(
         <SimpleProvider {...targetProvided}>
-          {() => <InjectedChild />}
+          <InjectedChild />
         </SimpleProvider>
       );
 
@@ -119,7 +119,7 @@ describe('React', () => {
 
       const tree = TestUtils.renderIntoDocument(
         <SimpleProvider {...targetProvided}>
-          {() => <InjectedChild />}
+          <InjectedChild />
         </SimpleProvider>
       );
 
@@ -140,7 +140,7 @@ describe('React', () => {
         spy();
         return <div saying={saying} />;
       }
-      
+
       const InjectedChild = inject()(Child);
 
       @inject()
@@ -158,7 +158,7 @@ describe('React', () => {
         render() {
           return (
             <SimpleProvider {...this.state}>
-              {() => <InjectedContainer />}
+              <InjectedContainer />
             </SimpleProvider>
           );
         }
@@ -183,7 +183,7 @@ describe('React', () => {
         spy();
         return <div saying={saying} changingProp={changingProp} />;
       }
-      
+
       const InjectedChild = inject()(Child);
 
       @inject()
@@ -204,7 +204,7 @@ describe('React', () => {
         render() {
           return (
             <SimpleProvider saying={this.state.saying}>
-              {() => <InjectedContainer changingProp={this.state.otherProp} />}
+              <InjectedContainer changingProp={this.state.otherProp} />
             </SimpleProvider>
           );
         }
@@ -231,7 +231,7 @@ describe('React', () => {
         spy();
         return <div otherProp={otherProp} />;
       }
-      
+
       const InjectedChild = inject()(Child);
 
       @inject(provided => ({otherProp: provided.otherProp}))
@@ -252,7 +252,7 @@ describe('React', () => {
         render() {
           return (
             <SimpleProvider {...this.state}>
-              {() => <InjectedContainer />}
+              <InjectedContainer />
             </SimpleProvider>
           );
         }

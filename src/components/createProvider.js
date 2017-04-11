@@ -5,7 +5,7 @@ import hasEmptyIntersection from '../utils/hasEmptyIntersection';
 import sharedKeys from '../utils/sharedKeys';
 
 export default function createProvider(React) {
-  const { Component, PropTypes } = React;
+  const { Component, PropTypes, Children } = React;
 
   return class Provider extends Component {
     static contextTypes = {
@@ -17,7 +17,7 @@ export default function createProvider(React) {
     };
 
     static propTypes = {
-      children: PropTypes.func.isRequired,
+      children: PropTypes.element.isRequired,
       provide: PropTypes.oneOfType([
                   PropTypes.object,
                   PropTypes.func,
@@ -82,8 +82,7 @@ export default function createProvider(React) {
     }
 
     render() {
-      const { children } = this.props;
-      return children();
+      return Children.only(this.props.children);
     }
   };
 }
