@@ -1,6 +1,7 @@
 import invariant from 'invariant';
 import shallowEqual from '../utils/shallowEqual';
 import isPlainObject from '../utils/isPlainObject';
+import { object } from 'prop-types';
 
 const defaultMapProvidedToProps = (provided) => ({...provided});
 
@@ -9,7 +10,7 @@ function getDisplayName(Component) {
 }
 
 export default function createInject(React) {
-  const { Component, PropTypes } = React;
+  const { Component } = React;
 
   //@TODO have not tested nextVersion stuff
   var nextVersion = 0;
@@ -35,7 +36,7 @@ export default function createInject(React) {
         static WrappedComponent = WrappedComponent;
 
         static contextTypes = {
-          provided: PropTypes.object
+          provided: object
         };
 
         shouldComponentUpdate(nextProps, nextState, nextContext) {

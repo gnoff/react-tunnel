@@ -1,5 +1,5 @@
 export default function sharedKeys(objA, objB) {
-  
+
   if (!objA || !objB) {
     return [];
   }
