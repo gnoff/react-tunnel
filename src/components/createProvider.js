@@ -3,7 +3,7 @@ import shallowEqual from '../utils/shallowEqual';
 import isPlainObject from '../utils/isPlainObject';
 import hasEmptyIntersection from '../utils/hasEmptyIntersection';
 import sharedKeys from '../utils/sharedKeys';
-import { object, func, oneOfType } from 'prop-types';
+import { object, func, oneOfType, element } from 'prop-types';
 
 export default function createProvider(React) {
   const { Component, Children } = React;
