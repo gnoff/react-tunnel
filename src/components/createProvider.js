@@ -3,25 +3,26 @@ import shallowEqual from '../utils/shallowEqual';
 import isPlainObject from '../utils/isPlainObject';
 import hasEmptyIntersection from '../utils/hasEmptyIntersection';
 import sharedKeys from '../utils/sharedKeys';
+import { object, func, oneOfType, element } from 'prop-types';
 
 export default function createProvider(React) {
-  const { Component, PropTypes, Children } = React;
+  const { Component, Children } = React;
 
   return class Provider extends Component {
     static contextTypes = {
-      provided: PropTypes.object
+      provided: object
     };
 
     static childContextTypes = {
-      provided: PropTypes.object.isRequired
+      provided: object.isRequired
     };
 
     static propTypes = {
-      children: PropTypes.element.isRequired,
-      provide: PropTypes.oneOfType([
-                  PropTypes.object,
-                  PropTypes.func,
-                ]),
+      children: element.isRequired,
+      provide: oneOfType([
+        object,
+        func,
+      ]),
     };
 
     getChildContext() {
@@ -50,11 +51,11 @@ export default function createProvider(React) {
       if (isNestedProvider) {
         invariant(
           isPlainObject(parentProvided),
-          'This Provider appears to be nested inside another provider but received a parent `provided` ' + 
+          'This Provider appears to be nested inside another provider but received a parent `provided` ' +
           'is not a plain Object. `provided` must be always be a plain Object. %s',
           parentProvided
-        );  
-      } 
+        );
+      }
 
 
       const { provide } = props;
@@ -68,11 +69,11 @@ export default function createProvider(React) {
 
       invariant(
         isPlainObject(provided),
-        'This Provider is attempting to provide something other than a plain Object. ' + 
+        'This Provider is attempting to provide something other than a plain Object. ' +
         'the `provide` prop must either be a plain object itself or a function that returns ' +
         'a plain Object. `provide` is or returned %s',
         provided
-      ); 
+      );
 
       return provided;
     }

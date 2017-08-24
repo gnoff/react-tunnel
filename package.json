@@ -55,6 +55,7 @@
     "webpack-dev-server": "1.x.x"
   },
   "dependencies": {
-    "invariant": "2.x.x"
+    "invariant": "2.x.x",
+    "prop-types": "^15.5.10"
   }
 }
