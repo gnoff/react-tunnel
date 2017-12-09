@@ -2,7 +2,7 @@
  * copied from https://github.com/gaearon/react-redux/blob/master/src/utils/isPlainObject.js authored by @gaearon
  */
 
-const fnToString = (fn) => Function.prototype.toString.call(fn);
+const fnToString = fn => Function.prototype.toString.call(fn);
 
 /**
  * @param {any} obj The object to inspect.
@@ -13,9 +13,10 @@ export default function isPlainObject(obj) {
     return false;
   }
 
-  const proto = typeof obj.constructor === 'function' ?
-    Object.getPrototypeOf(obj) :
-    Object.prototype;
+  const proto =
+    typeof obj.constructor === 'function'
+      ? Object.getPrototypeOf(obj)
+      : Object.prototype;
 
   if (proto === null) {
     return true;
@@ -23,7 +24,9 @@ export default function isPlainObject(obj) {
 
   const constructor = proto.constructor;
 
-  return typeof constructor === 'function'
-    && constructor instanceof constructor
-    && fnToString(constructor) === fnToString(Object);
+  return (
+    typeof constructor === 'function' &&
+    constructor instanceof constructor &&
+    fnToString(constructor) === fnToString(Object)
+  );
 }
