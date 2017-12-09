@@ -1,11 +1,12 @@
 {
-  "extends": "eslint-config-airbnb",
+  "extends": ["eslint-config-airbnb", "prettier"],
   "env": {
     "browser": true,
     "mocha": true,
     "node": true
   },
   "rules": {
+    "prettier/prettier": ["error", { "trailingComma": "es5", "singleQuote": true }],
     "react/jsx-uses-react": 2,
     "react/jsx-uses-vars": 2,
     "react/react-in-jsx-scope": 2,
@@ -16,6 +17,7 @@
     "padded-blocks": 0
   },
   "plugins": [
+    "prettier",    
     "react"
   ]
 }

@@ -1,5 +1,4 @@
 export default function sharedKeys(objA, objB) {
-
   if (!objA || !objB) {
     return [];
   }
@@ -15,10 +14,10 @@ export default function sharedKeys(objA, objB) {
     return keysA;
   }
 
-  let sharedKeys = [];
+  const sharedKeys = [];
 
   const hasOwn = Object.prototype.hasOwnProperty;
-  for (let keyA of keysA) {
+  for (const keyA of keysA) {
     if (hasOwn.call(objB, keyA)) {
       sharedKeys.push(keyA);
     }

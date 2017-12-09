@@ -14,7 +14,7 @@ export default function hasEmptyIntersection(objA, objB) {
     return false;
   }
 
-  const objCombined = {...objA, ...objB};
+  const objCombined = { ...objA, ...objB };
   const keysCombined = Object.keys(objCombined);
 
   if (keysA.length + keysB.length === keysCombined.length) {

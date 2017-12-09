@@ -1,9 +1,10 @@
 import expect from 'expect';
 import jsdomReact from './jsdomReact';
-import React, { PropTypes, Component } from 'react/addons';
+import React, { Component } from 'react';
 import { Provider } from '../../src/index';
+import PropTypes from 'prop-types';
 
-const { TestUtils } = React.addons;
+import TestUtils from 'react-dom/test-utils';
 
 describe('React', () => {
   describe('Provider', () => {
